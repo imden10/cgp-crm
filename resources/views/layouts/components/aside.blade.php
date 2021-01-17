@@ -18,7 +18,7 @@
                 <img src="/public/assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Admin</a>
+                <a href="#" class="d-block">{{\Illuminate\Support\Facades\Auth::user()->name}}</a>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -49,35 +49,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('api-methods')}}" class="nav-link @if(in_array(Request::segment(2),['api-methods'])) active @endif">
+                        <i class="fas fa-book nav-icon"></i>
+                        <p>Api methods</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ url('/logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="nav-link">
                         <i class="fas fa-sign-out-alt nav-icon"></i>
                         <p>Logout</p>
                     </a>
-                </li>
-            </ul>
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Pages
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Invoice</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Profile</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </nav>

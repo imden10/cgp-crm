@@ -25,4 +25,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth:sanctum', 'verifie
     Route::get('clients-get-list', 'ClientsController@getList')->name('clients-get-list');
     Route::resource('clients', 'ClientsController');
     Route::resource('users', 'UsersController');
+    Route::get('api-methods', 'ApiMethodsController@index')->name('api-methods');
 });
