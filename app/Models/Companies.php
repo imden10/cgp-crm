@@ -5,7 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Companies
@@ -113,10 +113,10 @@ class Companies extends Model
     }
 
     /**
-     * @return HasMany
+     * @return BelongsToMany
      */
     public function clients()
     {
-        return $this->hasMany(Clients::class, Clients::FIELD_COMPANY_ID, self::FIELD_ID);
+        return $this->belongsToMany(Clients::class)->using(ClientsCompanies::class);
     }
 }

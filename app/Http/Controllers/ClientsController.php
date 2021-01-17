@@ -4,14 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientsRequest;
 use App\Models\Clients;
+use App\Repositories\ClientsRepositories;
 use Illuminate\Database\QueryException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Exception;
+use Illuminate\Http\Request;
 
 class ClientsController extends Controller
 {
+    /**
+     * @var ClientsRepositories
+     */
+    private $clientsRepositories;
+
+    public function __construct(ClientsRepositories $clientsRepositories)
+    {
+        $this->clientsRepositories = $clientsRepositories;
+    }
+
     /**
      * @return Factory|View
      */
@@ -54,7 +66,7 @@ class ClientsController extends Controller
             ]
         ];
 
-        return view('clients.create',[
+        return view('clients.create', [
             'model'      => $model,
             'breadcrumb' => $breadcrumb
         ]);
@@ -67,11 +79,16 @@ class ClientsController extends Controller
     public function store(ClientsRequest $request)
     {
         try {
-            Clients::create($request->all());
-        } catch (QueryException $e){
+            /* @var $model Clients */
+            $model = Clients::create($request->except(['company_ids', '_token']));
+
+            $companyIds = $request->get('company_ids');
+
+            $model->companies()->sync($companyIds);
+
+        } catch (QueryException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-
         return redirect()->route('clients.index')->with('success', 'Client successfully created!');
     }
 
@@ -97,7 +114,7 @@ class ClientsController extends Controller
             ]
         ];
 
-        return view('clients.view',[
+        return view('clients.view', [
             'model'      => $client,
             'breadcrumb' => $breadcrumb
         ]);
@@ -126,7 +143,7 @@ class ClientsController extends Controller
             ]
         ];
 
-        return view('clients.edit',[
+        return view('clients.edit', [
             'model'      => $client,
             'breadcrumb' => $breadcrumb
         ]);
@@ -140,8 +157,13 @@ class ClientsController extends Controller
     public function update(ClientsRequest $request, Clients $client)
     {
         try {
-            $client->update($request->all());
-        } catch (QueryException $e){
+            $client->update($request->except(['company_ids', '_token']));
+
+            $companyIds = $request->get('company_ids');
+
+            $client->companies()->sync($companyIds);
+
+        } catch (QueryException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
 
@@ -157,10 +179,19 @@ class ClientsController extends Controller
     {
         try {
             $client->delete();
-        } catch (QueryException $e){
+        } catch (QueryException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Client successfully deleted!');
+    }
+
+    public function getList(Request $request)
+    {
+        $res = [
+            "results" => $this->clientsRepositories->searchByName($request->get('search'))
+        ];
+
+        return json_encode($res);
     }
 }

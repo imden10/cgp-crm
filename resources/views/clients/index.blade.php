@@ -35,7 +35,6 @@ $num = ($model->count() * ($model->currentPage() - 1)) + 1;
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>E-mail</th>
-                                <th>Company</th>
                                 <th>Created</th>
                                 <th class="text-right">Control</th>
                             </tr>
@@ -47,9 +46,6 @@ $num = ($model->count() * ($model->currentPage() - 1)) + 1;
                                         <td>{{$item->getLastName()}} {{$item->getFirstName()}}</td>
                                         <td>{{$item->getPhone()}}</td>
                                         <td>{{$item->getEmail()}}</td>
-                                        <td>
-                                            <span class="badge bg-primary">{{$item->company->getName()}}</span>
-                                        </td>
                                         <td>{{$item->getCreatedAt()->format('d.m.Y H:i')}}</td>
                                         <td class="text-right" style="width: 210px">
                                             <form action="{{ route('clients.destroy', $item->id) }}" method="POST">

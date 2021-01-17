@@ -22,6 +22,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth:sanctum', 'verifie
 
     Route::get('companies-get-list', 'CompaniesController@getList')->name('companies-get-list');
     Route::resource('companies', 'CompaniesController');
+    Route::get('clients-get-list', 'ClientsController@getList')->name('clients-get-list');
     Route::resource('clients', 'ClientsController');
     Route::resource('users', 'UsersController');
 });

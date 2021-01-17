@@ -79,7 +79,12 @@ class CompaniesController extends Controller
     public function store(CompaniesRequest $request)
     {
         try {
-            Companies::create($request->all());
+            /* @var $model Companies */
+            $model = Companies::create($request->except(['clients_ids', '_token']));
+
+            $clientsIds = $request->get('clients_ids');
+
+            $model->clients()->sync($clientsIds);
         } catch (QueryException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -152,7 +157,11 @@ class CompaniesController extends Controller
     public function update(CompaniesRequest $request, Companies $company)
     {
         try {
-            $company->update($request->all());
+            $company->update($request->except(['clients_ids', '_token']));
+
+            $clientsIds = $request->get('clients_ids');
+
+            $company->clients()->sync($clientsIds);
         } catch (QueryException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -14,14 +14,6 @@ if(isset($action) && $action == 'edit'){
     @if($edit) @method('PATCH') @endif
     <div class="row">
         <div class="col-6">
-            <div class="form-group select2-style">
-                <label for="exampleInputCompanyId">Select company</label>
-                <select name="company_id" class="form-control" id="exampleInputCompanyId">
-                    @if($edit)
-                        <option value="{{$model->getCompanyId()}}">{{$model->company->getName()}}</option>
-                    @endif
-                </select>
-            </div>
             <div class="form-group">
                 <label for="exampleInputFirstname">Firstname</label>
                 <input type="text" name="firstname" value="{{$edit ? $model->getFirstname() : old('firstname')}}" class="form-control" id="exampleInputFirstname" placeholder="Enter firstname" aria-describedby="exampleInputFirstname-error" aria-invalid="true">
@@ -45,6 +37,18 @@ if(isset($action) && $action == 'edit'){
             <div class="form-group">
                 <label for="exampleInputAddress">Address</label>
                 <input type="text" name="address" value="{{$edit ? $model->getAddress() : old('address')}}" class="form-control" id="exampleInputAddress" placeholder="Enter address" aria-describedby="exampleInputAddress-error" aria-invalid="true">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group select2-style">
+                <label for="exampleInputCompanyId">Add company</label>
+                <select name="company_ids[]" class="form-control" id="exampleInputCompanyId" multiple="multiple">
+                    @if($edit && count($model->companies))
+                        @foreach($model->companies as $company)
+                            <option value="{{$company->getId()}}" selected>{{$company->getName()}}</option>
+                        @endforeach
+                    @endif
+                </select>
             </div>
         </div>
     </div>
@@ -150,6 +154,15 @@ if(isset($action) && $action == 'edit'){
         }
         .select2-style .select2-container--default .select2-selection--single .select2-selection__arrow b {
             margin-top: 5px;
+        }
+        .select2-style .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .select2-style .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover,
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:focus {
+            background-color: transparent;
+            color: #fff;
         }
     </style>
 @endpush

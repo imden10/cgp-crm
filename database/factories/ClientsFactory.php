@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Clients;
-use App\Models\Companies;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ClientsFactory extends Factory
@@ -29,7 +28,6 @@ class ClientsFactory extends Factory
             'email'      => $this->faker->unique()->email,
             'phone'      => $this->faker->phoneNumber,
             'address'    => $this->faker->address,
-            'company_id' => Companies::factory()
         ];
     }
 }

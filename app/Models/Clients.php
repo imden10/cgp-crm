@@ -5,13 +5,12 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Clients
  *
  * @property integer $id
- * @property integer $company_id
  * @property string $firstname
  * @property string $lastname
  * @property string $middlename
@@ -21,14 +20,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @property Companies $company
+ * @property Companies[] $companies
  */
 class Clients extends Model
 {
     use HasFactory;
 
     public const FIELD_ID = 'id',
-        FIELD_COMPANY_ID = 'company_id',
         FIELD_FIRSTNAME = 'firstname',
         FIELD_LASTNAME = 'lastname',
         FIELD_MIDDLENAME = 'middlename',
@@ -48,14 +46,6 @@ class Clients extends Model
     public function getId()
     {
         return $this->getAttribute(self::FIELD_ID);
-    }
-
-    /**
-     * @return int
-     */
-    public function getCompanyId()
-    {
-        return $this->getAttribute(self::FIELD_COMPANY_ID);
     }
 
     /**
@@ -133,10 +123,10 @@ class Clients extends Model
     }
 
     /**
-     * @return HasOne
+     * @return BelongsToMany
      */
-    public function company()
+    public function companies()
     {
-        return $this->hasOne(Companies::class, Companies::FIELD_ID, self::FIELD_COMPANY_ID);
+        return $this->belongsToMany(Companies::class)->using(ClientsCompanies::class);
     }
 }
